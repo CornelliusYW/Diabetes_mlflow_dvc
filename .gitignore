@@ -1,0 +1,12 @@
+
+mlflow_dvc/
+.env/
+__pycache__/
+*.py[cod]
+.dvc/cache/
+.dvc/tmp/
+.dvc/.lock
+mlruns/
+.DS_Store
+Thumbs.db
+*.log

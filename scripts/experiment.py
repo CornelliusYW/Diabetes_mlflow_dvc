@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 import joblib
 import os
 
+# mlflow.set_tracking_uri("file:./mlruns")
+
 # Step 1: Load and preprocess the data
 df = pd.read_csv('data/data.csv')
 
@@ -27,8 +29,19 @@ y_test.to_csv('data/y_test.csv', index=False)
 os.system('dvc add data/X_train.csv data/X_test.csv data/y_train.csv data/y_test.csv')
 os.system('dvc push')
 
+# Set the MLFlow experiment name
+experiment_name = 'Diabetes Prediction Experiment'
+run_name = 'diabetes_rfc_run'
+experiment = mlflow.get_experiment_by_name(experiment_name)
+
+if experiment is not None:
+    experiment_id = experiment.experiment_id
+else:
+    experiment_id = mlflow.create_experiment(experiment_name)
+
+
 # Step 5: Start an MLFlow run and train the model
-with mlflow.start_run():
+with mlflow.start_run(experiment_id=experiment_id, run_name=run_name) as run:
     model = LogisticRegression()
     model.fit(X_train, y_train)
     
